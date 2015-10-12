@@ -22,4 +22,20 @@ class Node_factory:
 			head.next_node = Node(data, None)
 
 
-
+	def reverseLL(node):
+	    tail = None
+	    head = node
+	    
+	    while(head!=None):
+	        temp = head.next
+	        head.next = tail
+	        tail = head
+	        head = temp
+	    return tail
+	    
+	def reverseLL(n, last=None):
+	    if n is None:
+	        return last
+	    nxt = n.next
+	    n.next = last
+	    return reverseLL(nxt, n)
