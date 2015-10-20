@@ -166,7 +166,7 @@ class DoubleHashingTable:
 	
 	#Static class method for generating new hash functions, random seeds are avoided within this implementation because we strive to have hash functions
 	#that are as close as possible to coprime with the hashtable, so that we can achieve a load factor of 1 if necessary. However, in this case double hashing is
-	#essentially linear probing
+	#essentially linear probing when load factor is above a certain point.
 	@staticmethod
 	def genHashFunctions(size):
 		#Construct hash functions based off seed and table size, relies on standard builtin method __hash__()
