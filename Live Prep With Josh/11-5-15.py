@@ -1,34 +1,33 @@
-
 class LinkedList:
     
     def __init__(self, ll=None):
-        self.root = ll 
+        self.root = ll
         self.tail = ll
-        
+    
     def insert(self, data):
-        if not self.root: 
+        if not self.root:
             self.root = LinkedList.Node(data)
             self.tail = self.root
-        else: 
+        else:
             self._insert(data)
     
     def _insert(self, data):
         self.tail.next = LinkedList.Node(data)
         self.tail = self.tail.next
-        
+    
     def getList(self):
         return self.root
     
     #node class
     class Node:
-
+        
         def __init__(self, data):
             self.data = data
             self.next = None
 
 #creating a linked list
 ll = LinkedList()
-for i in range(0,10):
+for i in range(0,9):
     ll.insert(i)
 head = ll.getList()
 
@@ -42,8 +41,8 @@ def rreverseLL(root, prev=None):
         return rreverseLL(temp, root)
     else:
         return prev
-    
-#reverse link list recursively
+
+#reverse link list iteratively
 def ireverseLL(root):
     prev = None
     curr = root
@@ -60,30 +59,39 @@ def interweave(root):
     j = root
     
     #put slower runner i in the middle of the linked list
-    while(j!=None and j.next!=None):
+    while j!=None and j.next!=None:
         i = i.next
         j = j.next
-        if (j.next != None):
+        if j.next != None:
             j=j.next
-            
-    #start interleaving nodes
-    head = root
+
+#start interleaving nodes
+head = root
     mid = i
-    while(mid!=None):
-        temp1 = head.next
+    mid_dupl = mid
+    while mid!=None and head!=None:
+        if head.next!=mid_dupl:
+            temp1 = head.next
+        elif mid.next==None:
+            head.next = mid
+            mid.next=None
+            break
+        else:
+            temp1 = None
+
         temp2 = mid.next
         head.next = mid
         mid.next = temp1
         mid = temp2
         head = temp1
-    
+
     return root
-        
+
 head = interweave(head)
-for i in range(0,10):
+while(head!=None):
     print head.data
-    head = head.next
-            
+    head= head.next
+
 #compute numbers within array multiplied by the depth
 def computeDepths(arr, level=1):
     final = 0
@@ -135,50 +143,52 @@ def mergeArrays(arr):
                 else:
                     merged_array.append(next[w])
                     w+=1
-                    
+        
             while k<len(curr):
-                    merged_array.append(curr[k])
+                merged_array.append(curr[k])
                     k+=1
-                    
+            
             while w<len(next):
-                    merged_array.append(next[w])
+                merged_array.append(next[w])
                     w+=1
-                    
-            next_gen.append(merged_array)
-        arr = mergeArrays(next_gen)           
-    else:
-        arr = arr[0] if arr else None
 
+    next_gen.append(merged_array)
+        if(len(arr)%2==1): next_gen.append(arr[-1])
+        arr = mergeArrays(next_gen)
+else:
+    arr = arr[0] if arr else None
+    
     return arr
 
 
-
+print '****************'
+print mergeArrays([[10, 30, 45, 68], [3, 7, 19, 22], [45, 92, 112, 114]])
 
 
 '''
-MY IMPLEMENTATION OF LONGEST SUBSEQUENCE
-'''
+    MY IMPLEMENTATION OF LONGEST SUBSEQUENCE
+    '''
 
-#my solution is to create a BST a label nodes with number of inserts to the right of that node
+#my solution is to create a BST and label nodes with number of inserts to the right of that node
 class Solution(object):
     def lengthOfLIS(self, nums):
         """
-        :type nums: List[int]
-        :rtype: int
-        """
+            :type nums: List[int]
+            :rtype: int
+            """
         bst = Solution.BST()
         for i in nums:
             bst.insert(i)
-            
+        
         return bst.fetchLargestSubArrayLength()
-             
+    
     class Node(object):
         lc = None
         rc = None
         seq = 1
         def __init__(self, num):
             self.num = num
-            
+    
     class BST(object):
         max_sublength = 1
         
@@ -187,18 +197,18 @@ class Solution(object):
                 self.root = root
             else:
                 self.root = None
-                
+        
         def fetchLargestSubArrayLength(self):
             return self.max_sublength
-                
+        
         def insert(self, num):
             if(self.root==None):
                 self.root = Solution.Node(num)
             else:
                 self._insert(num)
-                
+        
         def _insert(self, num):
-            head = self.root 
+            head = self.root
             
             while(head != None):
                 if(num<=head.num):
@@ -214,22 +224,22 @@ class Solution(object):
                         head.rc = Solution.Node(num)
                         head = None
                     else:
-                        head = head.rc  
-      
+                        head = head.rc
 
-        def _insertR(self, num, node=None):
-            if(not node): node = self.root
+
+def _insertR(self, num, node=None):
+    if(not node): node = self.root
         
-            if(node.num>=num):
-                if(node.lc == None):
-                    node.lc = Solution.Node(num)
+        if(node.num>=num):
+            if(node.lc == None):
+                node.lc = Solution.Node(num)
                 else:
                     self._insert(num, node.lc)
-                    
-            if(node.num<num):
-                node.seq = node.seq+1
+    
+        if(node.num<num):
+            node.seq = node.seq+1
                 if(node.rc == None):
                     node.rc = Solution.Node(num)
-                else:
-                    if(node.seq>self.max_sublength): self.max_sublength = node.seq
+            else:
+                if(node.seq>self.max_sublength): self.max_sublength = node.seq
                     self._insert(num, node.rc)
