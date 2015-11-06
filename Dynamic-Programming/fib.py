@@ -1,7 +1,7 @@
 #1, 1, 2, 3, 5, 8, 13, 21, 34, ...
 
 
-#Naive implementation of Fibonacci O(2n) space and time
+#Naive implementation of Fibonacci O(2^n) space and time
 def naive_fib(n):
     if n<2: f=1
     else: f = naive_fib(n-1) + naive_fib(n-2)
