@@ -1,0 +1,389 @@
+
+----------
+Warning....
+Broken code written throughout,
+revised versions will be pushed shortly
+----------------------------------------
+
+
+import sys
+
+def findmin(arr):
+    nmin = sys.maxint  # Three backspace
+    
+    for i in arr:
+        if i<nmin: nmin=i
+            
+    return nmin
+
+
+def findmax(arr):
+    nmax = sys.minint
+    
+    for i in arr:
+        if i>nmax: nmax=i
+            
+    return nmax
+
+#O(n)
+def findminmax(arr):
+    nmin = sys.maxint
+    nmax = sys.minint
+    
+    for i in xrange(0,len(arr),2):
+        boolean = arr[i] < arr[i+1]
+        
+        if boolean:
+            if nmax<arr[i+1]:
+                nmax = arr[i+1]
+            if nmin>arr[i]:
+                nmin=arr[i]
+        else:
+            if nmin>arr[i+1]:
+                nmin=arr[i+1]
+            if nmax<arr[i]:
+                nmax = arr[i]
+            
+    return (nmin,nmax)
+    
+    
+#choose a random pivot
+# arrange elements according to pivot
+# check the index of that pivot, to find the ith order
+# depending on desired i, we would consider either the left or right subarray
+# then repeat the process recursively
+
+import random
+
+"""
+def choosepivot(arr, i):
+    
+    pivot = random.randrange(0, len(arr) -1)
+    beg = 0
+    end = len(arr)-1
+    
+    k = partition(arr, pivot, beg, end)
+    
+def partition(arr, pivot, beg, end):
+    
+    partition = beg
+    j = end 
+    l = beg
+    
+    while(j>l):
+        
+        if(arr[l]>arr[j]): 
+            arr = swap(arr, l, j)
+            l+=1
+            j-=1
+            
+        while(arr[l] < arr[pivot]):
+            l+=1
+            
+        while(arr[j] > arr[pivot]):
+            j-=1
+            
+    return 
+    
+            
+        
+        
+def swap(arr, i, j):
+    temp = arr[j]
+    arr[j] = arr[i]
+    arr[i] = temp
+    return arr
+"""
+
+
+def ithorderstat(arr, i):
+    
+    i_found = False
+    beg = 0
+    end = len(arr)-1
+    
+    while not i_found:
+        
+        pivot = partition(arr, beg, end)
+        if pivot == i:
+            i_found = True
+            
+        elif pivot>i:
+            beg = 0
+            end = pivot-1
+            
+        elif pivot<i:
+            beg = pivot+1
+            end = len(arr)-1
+            
+    return arr[pivot]
+
+
+def ithorderstat(arr, i):
+
+    if len(arr)==1:
+        return arr[0]
+        
+    pivot = partition(arr, i)
+    if pivot == i:
+        return arr[pivot]
+    elif pivot < i:
+        pivot = ithorderstat(arr[pivot+1:], i-pivot)
+    elif i > pivot:
+        pivot = ithorderstat(arr[:pivot], i)
+            
+    return arr[pivot]
+        
+        
+    
+
+def detectpalindrome(root, mid):
+    if root is mid:
+        return root.data
+    
+    c = detectpalindrom(root.next)
+     
+    return c 
+
+
+# ============================
+
+#BST with count of the nodes and any data in nodes
+#come up with method that will return any node with equal probability
+
+import random
+
+
+def traverse(root, n, pick=None):
+    tick = 0
+    def wrapper(root, n, pick):
+    
+        if pick is None 
+            pick = random.randint(0,n-1)
+
+        if root.left is not None:
+            saved_node = traverse(root, n, pick)
+
+        #in order traversal process
+        tick+=1
+
+        if pick == tick:
+            saved_node = root
+
+        if root.right is not None:
+            saved_node = traverse(root, n, pick)
+
+        return saved_node
+    
+    return wrapper(root, n, pick)
+
+
+
+
+import java.io.*;
+import java.util.*;
+
+/*
+ * To execute Java, please define "static void main" on a class
+ * named Solution.
+ *
+ * If you need more classes, simply define them inline.
+ */
+
+/*
+
+Remove the minimum number of invalid parentheses in order to make the input string valid. 
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+*/
+
+/*
+  
+"()())()" -> ["()()()", "(())()"]
+"(a)())()" -> ["(a)()()", "(a())()"]
+")(" -> [""]
+  
+*/
+/*
+class Solution {
+  
+  public static String removeInvalid(String input, ArrayList<Integer> indices) {
+    
+    StringBuilder b = new StringBuilder();
+    
+    int j = 0;
+    for(int i = 0; i < input.size(); i++) {
+      if(i != indices.get(j)) {
+        b.add(input.charAt(i));
+      } else {
+        j++;
+      }
+    }
+    
+    return b.toString();
+  }
+  
+  public static String correctParenthesis(String input) {
+    int count = 0;
+    ArrayList<Integer> indices = new ArrayList<>();
+    
+    // Forward Direction
+    for(int i = 0; i < input.size(); i++) {
+      if(input.charAt(i) == '(') {
+        count++;
+      } else if(input.charAt(i) == ')') {
+        count--;
+        if(count < 0) {
+          indices.add(i);
+        }
+      }
+    }
+    
+    String next = removeInvalid(input, indices);
+    
+    count = 0;
+    indices.clear();
+    
+    // Backward Direction
+    for(int i = next.size() - 1; i >= 0; i--) {
+      if(input.charAt(i) == '(') {
+        count --;
+        if(count < 0) {
+          indices.add(i);
+        }
+      } else {
+        count++;
+      }
+    }
+    
+    return removeInvalid(input, indices);
+    
+  }
+  
+  public static void main(String[] args) {
+    
+    
+    
+  }
+}
+*/
+
+
+
+
+/*
+
+Given a string S, you are allowed to convert it to a palindrome by adding characters in front of it. Find and return the shortest palindrome you can find by performing this transformation.
+
+For example:
+
+Given "aacecaaa", return "aaacecaaa".
+
+Given "abcd", return "dcbabcd".
+
+Given "abbad", return "dabbad".
+
+*/
+
+/*
+class Solution {
+  
+  // Match in case of an odd palindrome
+  public static int matchPalindrome(String input, int index) {
+    int offset = 1;
+    while(index - offset > 0 && index + offset < input.size()) {
+      if(input.charAt(index - offset) == input.charAt(index + offset)) {
+        offset++;
+      } else {
+        break;
+      }
+    }
+    
+    return offset - 1;
+  }
+  
+  // Match in case of an even palindrome
+  public static int matchPalindrome(String input, int index1, int index2) {
+    int offset = 1;
+    while(index1 - offset > 0 && index2 + offset < input.size()) {
+      if(input.charAt(index1 - offset) == input.charAt(index2 + offset)) {
+        offset++;
+      } else {
+        break;
+      }
+    }
+    
+    return offset - 1;
+  }
+  
+  public static String reverse(String input) {
+    StringBuilder b = new StringBuilder();
+    for(int i = input.size() - 1; i >= 0; i--) {
+      b.add(input.charAt(i));
+    }
+    return b.toString();
+  }
+  
+  public static String palindrome(String input) {
+    
+    // Case of empty string
+    if(input == null || input.size() == 0) {
+      return input;
+    }
+    
+    // Potential centers (odd)
+    int odd_best = 1, odd_index = 0;
+    for(int i = 1; i < input.size(); i++) {
+      int tmp = matchPalindrome(input, i);
+      if(odd_best < tmp) {
+        odd_best = tmp;
+        odd_index = i;
+      }
+    }
+    
+    // Potential centers (even)
+    int even_best = 1; even_index = 0;
+    for(int i = 1; i < input.size() - 1; i++) {
+      int tmp = matchPalindrome(input, i, i + 1);
+      if(even_best < tmp) {
+        even_best = tmp;
+        even_index = i;
+      }
+    }
+    
+    // Determine the best option
+    String remainder;
+    if(even_best > odd_best) {
+      remainder = input.substring(even_best + 1, input.size());
+    } else {
+      remainder = input.substring(odd_best + 1, input.size());
+    }
+    
+    // Prepend the reversed portion following all matches
+    return reverse(remainder) + input;
+    
+  }
+  
+  public static void main(String[] args) {
+    
+    
+    
+    
+  }
+  
+}
+*/
+
+
+
+#given array of values print all permutations
+
+def array_permute(remaining, so_far):
+    if len(remaining) > 0:
+        for el in range(len(remaining)):
+            array_permute(remaining[:el] + remaining[el+1:], so_far +[remaining[el]])
+    else:
+        print so_far
+        
+array_permute([1, 2, 3, 4], [])
