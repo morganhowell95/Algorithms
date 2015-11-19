@@ -1,49 +1,80 @@
+import java.util.HashMap;
+
 /**
- * The following is a disjoint set linked list implementation.
+ * Disjoint Set implementation.
  *
- * Note each disjoint set must be maintained separately. This supports
- * construction (via the constructor), union with another disjoint set,
- * and the obtainment of the representative element of the list.
- *
- * This implementation works via linked lists.
+ * Assumes that all elements in each tree are completely disjoint.
+ * Implements rank and path compression optimizations.
 */
 public class DisjointSet<T> {
 
-    public class Node<T> {
-        public T value;
-        private Node<T> next;
-        private Node<T> parent;
-        public Node(T value, Node<T> parent) {
-            this.value = value;
-            this.next = null;
-            this.parent = (parent == null) ? this : parent;
+    private class Node<T> {
+        public int rank;
+        public T parent;
+        public Node(int rank, T parent) {
+            this.rank = rank;
+            this.parent = parent;
         }
     }
 
-    private Node<T> head;
-    private Node<T> tail;
+    private HashMap<T, Node<T>> table;
 
-    public DisjointSet(T value) {
-        head = new Node<T>(value, null);
-        tail = head;
+    /**
+     * Constructor.
+     *
+    */
+    public DisjointSet() {
+        this.table = new HashMap<T, Node<T>>();
     }
 
-    public void union(DisjointSet<T> ll) {
-        Node<T> other_head = ll.head;
-        while(other_head != null) {
-            tail.next = other_head;
-            tail.next.parent = head;
-            tail = tail.next;
-            other_head = other_head.next;
+    /**
+     * Creates New Set.
+     *
+     * Creates a new set and adds it to the forest of
+     * disjoint sets. We ensure the object does not
+     * exist in the set.
+    */
+    public void createSet(T value) {
+        table.put(value, new Node<T>(0, value));
+    }
+
+    /**
+     * Finds representative.
+     *
+     * Finds the set of a given value and returns the
+     * representative of this element, performing path
+     * compression as the search continues.
+    */
+    public T findSet(T value) {
+        Node<T> key = table.get(value);
+        if(key == null) {
+            return null;
+        } else if(key.parent != value) {
+            key.parent = findSet(key.parent);
         }
+        return key.parent;
     }
 
-    public Node<T> find() {
-        return head.parent;
-    }
 
-    public boolean front() {
-        return head.parent == head;
+    /**
+     * Joins two sets together.
+     *
+     * Works by determining the rank of a given node
+     * and joining based on the rank.
+    */
+    public void union(T a, T b) {
+        Node<T> a_key = table.get(a);
+        Node<T> b_key = table.get(b);
+        if(a_key != null && b_key != null) {
+            if(a_key.rank < b_key.rank) {
+                a_key.parent = b;
+            } else {
+                b_key.parent = a;
+                if(a_key.rank == b_key.rank) {
+                    a_key.rank++;
+                }
+            }
+        }
     }
 
 }
