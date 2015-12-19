@@ -1,0 +1,38 @@
+
+#Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        def constructNumbers(node):
+            val1 = 0
+            multiplier = 1
+            while node is not None:
+                val1 += node.val * multiplier 
+                node = node.next
+                multiplier *= 10
+            return val1
+            
+        (num1, num2) = (constructNumbers(l1), constructNumbers(l2))
+        summ = str(num1+num2)
+        
+        new_format = None
+        head = None
+        
+        for num in xrange(len(summ)-1, -1, -1):
+            if num==len(summ)-1:
+                new_format = ListNode(summ[num])
+                head = new_format
+            else:
+                new_format.next = ListNode(summ[num])
+                new_format = new_format.next
+                
+        return head
