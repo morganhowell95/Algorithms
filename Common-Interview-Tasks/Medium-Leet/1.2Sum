@@ -1,0 +1,36 @@
+Class Solution(object):
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        
+        """
+        Logic:
+        x+y=z where z is target value
+        
+        1. Hash all values in list into dictionary inside tuple (index, value)
+        2. scan through list (z-y=x) (target value - scanned value) to see if this value is contained in the hash map
+        
+        """
+        
+        #hashing all the numbers within the list
+        hashm = {}
+        for i in range(0,len(nums)):
+            if not nums[i] in hashm:
+                hashm[nums[i]]=i
+        
+        rec_i = -1
+        rec_j = -1
+        
+        
+        for i in range(0,len(nums)):
+            checked_val = target - nums[i]
+            if checked_val in hashm:
+                index_val = hashm[checked_val]
+                if index_val < i:
+                    rec_i = index_val+1
+                    rec_j = i+1
+             
+        return [rec_i, rec_j]
